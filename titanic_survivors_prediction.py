@@ -11,7 +11,7 @@ loaded_model = pickle.load(open('train_model.sav','rb'))
 
 # Function to save user inputs and predictions
 def save_prediction_history(inputs, prediction):
-    history_file = 'prediction_histories.csv'
+    history_file = 'prediction_history.csv'
     if not os.path.exists(history_file):
         with open(history_file, 'w', newline='') as file:
             writer = csv.writer(file)
@@ -81,21 +81,18 @@ if st.button('Predict'):
     # Display the prediction result
     if prediction[0] == 1:
         st.write('The passenger is predicted to have **survived** the Titanic incident.')
-        st.image(survive_image_url)
+        st.image('/Users/macbookpro/Desktop/Titanic_Survivors_Prediction/survive.png')
     else:
         st.write('The passenger is predicted to have **not survived** the Titanic incident.')
-        st.image(drown_image_url)
+        st.image('/Users/macbookpro/Desktop/Titanic_Survivors_Prediction/drown.jpg')
 
 # Add download button
 if st.button('Download Prediction History'):
-    history_df = pd.read_csv('prediction_histories.csv')
+    history_df = pd.read_csv('prediction_history.csv')
     # Replace encoded values with labels
-    sex_label = {1: 'female', 0: 'male'}
-    history_df['Sex'] = history_df['Sex'].map(sex_label)
+    history_df['Sex'] = history_df['Sex'].apply(lambda x: 'female' if x == 1 else 'male')
     embarked_label = {'C': 'Cherbourg', 'Q': 'Queenstown', 'S': 'Southampton'}
     history_df['Embarked'] = history_df['Embarked'].map(embarked_label)
     history_df['Prediction'] = history_df['Prediction'].apply(lambda x: 'Survived' if x == 1 else 'Not Survived')
-    # Reorder columns
-    history_df = history_df[['Pclass', 'Sex', 'Age', 'SibSp', 'Parch', 'Fare', 'Embarked', 'Prediction']]
     st.write(history_df)
     st.markdown(get_table_download_link(history_df), unsafe_allow_html=True)
