@@ -82,10 +82,10 @@ if st.button('Predict'):
     # Display the prediction result
     if prediction[0] == 1:
         st.write('The passenger is predicted to have **survived** the Titanic incident.')
-        st.image('/Users/macbookpro/Desktop/Titanic_Survivors_Prediction/survive.png')
+        st.markdown(f'<img src="{survive_image_url}" alt="Survived" style="width: 200px;">', unsafe_allow_html=True)
     else:
         st.write('The passenger is predicted to have **not survived** the Titanic incident.')
-        st.image('/Users/macbookpro/Desktop/Titanic_Survivors_Prediction/drown.jpg')
+        st.markdown(f'<img src="{drown_image_url}" alt="Not Survived" style="width: 200px;">', unsafe_allow_html=True)
 
 # Add download button
 if st.button('Download Prediction History'):
