@@ -81,7 +81,7 @@ if st.button('Predict'):
 prediction_df = pd.DataFrame(st.session_state.prediction_history)
 
 # Display the prediction history table
-st.write("Prediction History", prediction_df)
+st.write("Prediction History:", prediction_df)
 
 # Create a file download link
 csv = prediction_df.to_csv(index=False)
