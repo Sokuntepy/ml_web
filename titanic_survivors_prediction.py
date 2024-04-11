@@ -19,12 +19,12 @@ def save_prediction_history(inputs, prediction):
     with open(history_file, 'a', newline='') as file:
         writer = csv.writer(file)
         writer.writerow(inputs + [prediction])
-
+        
 # Add the function to generate download link for CSV file
 def get_table_download_link(df):
     csv = df.to_csv(index=False)
     b64 = base64.b64encode(csv.encode()).decode()
-    href = f'<a href="data:file/csv;base64,{b64}" download="prediction_histories.csv">Download CSV File</a>'
+    href = f'<a href="data:file/csv;base64,{b64}" download="prediction_history.csv">Download CSV File</a>'
     return href
 
 # Display image URLs
@@ -64,6 +64,7 @@ embarked_options = ['C', 'Q', 'S']
 embarked = st.selectbox('Embarked', embarked_options)
 st.write(':bulb: C: Cherbourg, S: Southampton, Q: Queenstown')
 
+
 # Add a predict button
 if st.button('Predict'):
     # Create a feature vector from the input data
@@ -76,7 +77,7 @@ if st.button('Predict'):
     prediction = loaded_model.predict(feature_vector)
 
     # Save the prediction history
-    save_prediction_history([pclass, sex, age, sibsp, parch, float(fare), embarked, 'Survived' if prediction[0] == 1 else 'Not Survived'], prediction[0])
+    save_prediction_history([pclass, sex_encoded, age, sibsp, parch, float(fare), embarked_options.index(embarked)], prediction[0])
 
     # Display the prediction result
     if prediction[0] == 1:
@@ -89,10 +90,5 @@ if st.button('Predict'):
 # Add download button
 if st.button('Download Prediction History'):
     history_df = pd.read_csv('prediction_history.csv')
-    # Replace encoded values with labels
-    history_df['Sex'] = history_df['Sex'].apply(lambda x: 'female' if x == 1 else 'male')
-    embarked_label = {'C': 'Cherbourg', 'Q': 'Queenstown', 'S': 'Southampton'}
-    history_df['Embarked'] = history_df['Embarked'].map(embarked_label)
-    history_df['Prediction'] = history_df['Prediction'].apply(lambda x: 'Survived' if x == 1 else 'Not Survived')
     st.write(history_df)
     st.markdown(get_table_download_link(history_df), unsafe_allow_html=True)
