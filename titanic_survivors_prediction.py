@@ -6,14 +6,8 @@ import streamlit as st
 import csv
 import base64  
 
-# Define the directory path and filename
-directory = "/Users/macbookpro/Desktop/Titanic_Survivors_Prediction"
-filename = 'train_model.sav'
-full_path = os.path.join(directory, filename)
-
-# Load the saved model from the file
-with open(full_path, 'rb') as file:
-    loaded_model = pickle.load(file)
+#loading the saved model
+loaded_model = pickle.load(open('train_model.sav','rb'))
 
 # Function to save user inputs and predictions
 def save_prediction_history(inputs, prediction):
