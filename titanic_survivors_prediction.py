@@ -27,15 +27,17 @@ def get_table_download_link(df):
     href = f'<a href="data:file/csv;base64,{b64}" download="prediction_histories.csv">Download CSV File</a>'
     return href
 
-# Display image
-image_path = "/Users/macbookpro/Desktop/Titanic_Survivors_Prediction/titanic.jpg"
+# Display image URLs
+survive_image_url = "https://github.com/Sokuntepy/ml_web/blob/main/survive.png"
+titanic_image_url = "https://github.com/Sokuntepy/ml_web/blob/main/titanic.jpg"
+drown_image_url = "https://github.com/Sokuntepy/ml_web/blob/main/drown.jpg"
 
 # Create a two-column layout
 col1, col2 = st.columns([1, 3])
 
 # Display the image in the first column
 with col1:
-    st.image(image_path, width=130)
+    st.image(titanic_image_url, width=130)
 
 # Display the title and description in the second column
 with col2:
@@ -79,10 +81,10 @@ if st.button('Predict'):
     # Display the prediction result
     if prediction[0] == 1:
         st.write('The passenger is predicted to have **survived** the Titanic incident.')
-        st.image('/Users/macbookpro/Desktop/Titanic_Survivors_Prediction/survive.png')
+        st.image(survive_image_url)
     else:
         st.write('The passenger is predicted to have **not survived** the Titanic incident.')
-        st.image('/Users/macbookpro/Desktop/Titanic_Survivors_Prediction/drown.jpg')
+        st.image(drown_image_url)
 
 # Add download button
 if st.button('Download Prediction History'):
