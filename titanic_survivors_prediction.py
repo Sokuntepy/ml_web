@@ -28,9 +28,9 @@ def get_table_download_link(df):
     return href
 
 # Display image URLs
-survive_image_url = "https://github.com/Sokuntepy/ml_web/blob/main/survive.png"
-titanic_image_url = "https://github.com/Sokuntepy/ml_web/blob/main/titanic.jpg"
-drown_image_url = "https://github.com/Sokuntepy/ml_web/blob/main/drown.jpg"
+survive_image_url = "https://raw.githubusercontent.com/Sokuntepy/ml_web/main/survive.png"
+titanic_image_url = "https://raw.githubusercontent.com/Sokuntepy/ml_web/main/titanic.jpg"
+drown_image_url = "https://raw.githubusercontent.com/Sokuntepy/ml_web/main/drown.jpg"
 
 # Create a two-column layout
 col1, col2 = st.columns([1, 3])
