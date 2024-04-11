@@ -41,7 +41,8 @@ embarked = st.selectbox('Embarked', embarked_options)
 st.write(':bulb: C: Cherbourg, S: Southampton, Q: Queenstown')
 
 # Create a list to store prediction history
-prediction_history = []
+if 'prediction_history' not in st.session_state:
+    st.session_state.prediction_history = []
 
 # Add a predict button
 if st.button('Predict'):
@@ -65,7 +66,7 @@ if st.button('Predict'):
         survived = 'Not Survived'
 
     # Store the prediction history
-    prediction_history.append({
+    st.session_state.prediction_history.append({
         'Passenger Class': pclass,
         'Sex': sex,
         'Age': age,
@@ -77,7 +78,7 @@ if st.button('Predict'):
     })
 
 # Convert the prediction history to a pandas DataFrame
-prediction_df = pd.DataFrame(prediction_history)
+prediction_df = pd.DataFrame(st.session_state.prediction_history)
 
 # Create a file download link
 csv = prediction_df.to_csv(index=False)
