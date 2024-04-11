@@ -80,6 +80,9 @@ if st.button('Predict'):
 # Convert the prediction history to a pandas DataFrame
 prediction_df = pd.DataFrame(st.session_state.prediction_history)
 
+# Display the prediction history table
+st.write("Prediction History", prediction_df)
+
 # Create a file download link
 csv = prediction_df.to_csv(index=False)
 b64 = base64.b64encode(csv.encode()).decode()
