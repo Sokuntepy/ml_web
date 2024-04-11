@@ -9,6 +9,24 @@ import base64
 #loading the saved model
 loaded_model = pickle.load(open('train_model.sav','rb'))
 
+# Function to save user inputs and predictions
+def save_prediction_history(inputs, prediction):
+    history_file = 'prediction_histories.csv'
+    if not os.path.exists(history_file):
+        with open(history_file, 'w', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow(['Pclass', 'Sex', 'Age', 'SibSp', 'Parch', 'Fare', 'Embarked', 'Prediction'])
+    with open(history_file, 'a', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow(inputs + [prediction])
+
+# Add the function to generate download link for CSV file
+def get_table_download_link(df):
+    csv = df.to_csv(index=False)
+    b64 = base64.b64encode(csv.encode()).decode()
+    href = f'<a href="data:file/csv;base64,{b64}" download="prediction_histories.csv">Download CSV File</a>'
+    return href
+
 # Display image URLs
 survive_image_url = "https://raw.githubusercontent.com/Sokuntepy/ml_web/main/survive.png"
 titanic_image_url = "https://raw.githubusercontent.com/Sokuntepy/ml_web/main/titanic.jpg"
@@ -46,9 +64,6 @@ embarked_options = ['C', 'Q', 'S']
 embarked = st.selectbox('Embarked', embarked_options)
 st.write(':bulb: C: Cherbourg, S: Southampton, Q: Queenstown')
 
-# Store history of predictions
-history = []
-
 # Add a predict button
 if st.button('Predict'):
     # Create a feature vector from the input data
@@ -60,33 +75,24 @@ if st.button('Predict'):
     # Make a prediction using the loaded model
     prediction = loaded_model.predict(feature_vector)
 
-    # Store input and prediction in history
-    history.append({
-        'Pclass': pclass,
-        'Sex': sex,
-        'Age': age,
-        'SibSp': sibsp,
-        'Parch': parch,
-        'Fare': fare,
-        'Embarked': embarked,
-        'Prediction': 'Survived' if prediction[0] == 1 else 'Not Survived'
-    })
+    # Save the prediction history
+    save_prediction_history([pclass, sex, age, sibsp, parch, float(fare), embarked, 'Survived' if prediction[0] == 1 else 'Not Survived'], prediction[0])
 
     # Display the prediction result
     if prediction[0] == 1:
         st.write('The passenger is predicted to have **survived** the Titanic incident.')
-        st.markdown(f'<img src="{survive_image_url}" alt="Survived" style="width: 200px;">', unsafe_allow_html=True)
+        st.image(survive_image_url)
     else:
         st.write('The passenger is predicted to have **not survived** the Titanic incident.')
-        st.markdown(f'<img src="{drown_image_url}" alt="Not Survived" style="width: 200px;">', unsafe_allow_html=True)
+        st.image(drown_image_url)
 
-# Allow users to download history in Excel format
-if len(history) > 0:
-    history_df = pd.DataFrame(history)
-    st.write('### Prediction History:')
+# Add download button
+if st.button('Download Prediction History'):
+    history_df = pd.read_csv('prediction_histories.csv')
+    # Replace encoded values with labels
+    history_df['Sex'] = history_df['Sex'].apply(lambda x: 'female' if x == 1 else 'male')
+    embarked_label = {'C': 'Cherbourg', 'Q': 'Queenstown', 'S': 'Southampton'}
+    history_df['Embarked'] = history_df['Embarked'].map(embarked_label)
+    history_df['Prediction'] = history_df['Prediction'].apply(lambda x: 'Survived' if x == 1 else 'Not Survived')
     st.write(history_df)
-
-    csv = history_df.to_csv(index=False)
-    b64 = base64.b64encode(csv.encode()).decode()  # B64 encoding
-    href = f'<a href="data:file/csv;base64,{b64}" download="prediction_history.csv">Download Prediction History</a>'
-    st.markdown(href, unsafe_allow_html=True)
+    st.markdown(get_table_download_link(history_df), unsafe_allow_html=True)
