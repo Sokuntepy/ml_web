@@ -28,16 +28,16 @@ def get_table_download_link(df):
     return href
 
 # Display image URLs
-survive_image_url = "https://github.com/Sokuntepy/ml_web/blob/main/survive.png"
-titanic_image_url = "https://github.com/Sokuntepy/ml_web/blob/main/titanic.jpg"
-drown_image_url = "https://github.com/Sokuntepy/ml_web/blob/main/drown.jpg"
+survive_image_url = "https://raw.githubusercontent.com/Sokuntepy/ml_web/main/survive.png"
+titanic_image_url = "https://raw.githubusercontent.com/Sokuntepy/ml_web/main/titanic.jpg"
+drown_image_url = "https://raw.githubusercontent.com/Sokuntepy/ml_web/main/drown.jpg"
 
 # Create a two-column layout
 col1, col2 = st.columns([1, 3])
 
 # Display the image in the first column
 with col1:
-    st.markdown(f'<img src="{titanic_image_url}" alt="Titanic" style="width: 130px;">', unsafe_allow_html=True)
+    st.image(titanic_image_url, width=130)
 
 # Display the title and description in the second column
 with col2:
@@ -81,10 +81,10 @@ if st.button('Predict'):
     # Display the prediction result
     if prediction[0] == 1:
         st.write('The passenger is predicted to have **survived** the Titanic incident.')
-        st.markdown(f'<img src="{survive_image_url}" alt="Survived" style="width: 200px;">', unsafe_allow_html=True)
+        st.image(survive_image_url)
     else:
         st.write('The passenger is predicted to have **not survived** the Titanic incident.')
-        st.markdown(f'<img src="{drown_image_url}" alt="Not Survived" style="width: 200px;">', unsafe_allow_html=True)
+        st.image(drown_image_url)
 
 # Add download button
 if st.button('Download Prediction History'):
