@@ -18,7 +18,7 @@ def save_prediction_history(inputs, prediction):
             writer.writerow(['Pclass', 'Sex', 'Age', 'SibSp', 'Parch', 'Fare', 'Embarked', 'Prediction'])
     with open(history_file, 'a', newline='') as file:
         writer = csv.writer(file)
-        writer.writerow(inputs + [prediction])
+        writer.writerow(inputs[:-1] + [inputs[-2]] + [prediction])  # Fixed this line to correctly save the data
 
 # Add the function to generate download link for CSV file
 def get_table_download_link(df):
