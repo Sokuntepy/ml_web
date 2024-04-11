@@ -90,9 +90,12 @@ if st.button('Predict'):
 if st.button('Download Prediction History'):
     history_df = pd.read_csv('prediction_histories.csv')
     # Replace encoded values with labels
-    history_df['Sex'] = history_df['Sex'].apply(lambda x: 'female' if x == 1 else 'male')
+    sex_label = {1: 'female', 0: 'male'}
+    history_df['Sex'] = history_df['Sex'].map(sex_label)
     embarked_label = {'C': 'Cherbourg', 'Q': 'Queenstown', 'S': 'Southampton'}
     history_df['Embarked'] = history_df['Embarked'].map(embarked_label)
     history_df['Prediction'] = history_df['Prediction'].apply(lambda x: 'Survived' if x == 1 else 'Not Survived')
+    # Reorder columns
+    history_df = history_df[['Pclass', 'Sex', 'Age', 'SibSp', 'Parch', 'Fare', 'Embarked', 'Prediction']]
     st.write(history_df)
     st.markdown(get_table_download_link(history_df), unsafe_allow_html=True)
